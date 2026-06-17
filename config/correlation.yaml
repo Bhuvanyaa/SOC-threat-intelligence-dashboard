@@ -1,0 +1,9 @@
+rules:
+  - name: ssh_bruteforce_from_malicious_ip
+    log_event_contains: "ssh"
+    mitre: T1110
+    severity: HIGH
+
+  - name: known_c2_communication
+    mitre: T1071
+    severity: CRITICAL

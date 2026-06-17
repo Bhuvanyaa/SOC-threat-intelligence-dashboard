@@ -1,0 +1,8 @@
+wazuh:
+  alerts_file: /var/ossec/logs/alerts/alerts.json
+  min_alert_level: 7
+
+log_fields:
+  source_ip: data.srcip
+  description: rule.description
+  timestamp: timestamp

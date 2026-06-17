@@ -1,0 +1,9 @@
+rules:
+  - name: Malicious IP Access
+    field: src_ip
+    type: ip
+    severity: HIGH
+    mitre:
+      id: T1078
+      tactic: Initial Access
+      technique: Valid Accounts

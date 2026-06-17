@@ -1,0 +1,14 @@
+sources:
+  alienvault_otx:
+    enabled: true
+    api_key_env: OTX_API_KEY
+    type: ip
+    confidence: 70
+
+  abuseipdb:
+    enabled: true
+    api_key_env: ABUSEIPDB_API_KEY
+    min_confidence: 50
+
+schedule:
+  fetch_interval_minutes: 30
