@@ -92,19 +92,12 @@ SOC-threat-intelligence-dashboard/
 ├── .gitignore
 └── README.md
 
-## 📸 Project Screenshots
+## 🎯 Project Overview
 
-### SOC Threat Intelligence Dashboard
+This project collects security alerts from Wazuh, ingests Indicators of Compromise (IOCs) from AlienVault OTX, stores security data in MongoDB, and correlates alerts with known malicious indicators.
 
-The dashboard provides a centralized view of security alerts, IOC information,
-threat severity, alert sources, and recent correlated security events.
+The dashboard provides a centralized view of detected threats and their severity.
+
+## 📸 Dashboard Preview
 
 ![SOC Threat Intelligence Dashboard](screenshots/dashboard.png)
-
-### Recent Security Alerts
-
-![Recent Security Alerts](screenshots/alerts.png)
-
-### Alert Ingestion and Testing
-
-![Alert Ingestion](screenshots/testing.png)
