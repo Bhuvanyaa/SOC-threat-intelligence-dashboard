@@ -1,1 +1,6 @@
+dash
+plotly
+pymongo
+pandas
+requests
 python-dotenv
