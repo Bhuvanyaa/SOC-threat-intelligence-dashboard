@@ -4,12 +4,13 @@ from dash import html, dcc
 import plotly.express as px
 from pymongo import MongoClient
 import pandas as pd
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # ==============================
 # MongoDB Connection
 # ==============================
-import os
-
 client = MongoClient(os.getenv("MONGODB_URI"))
 db = client["soc_db"]
 
