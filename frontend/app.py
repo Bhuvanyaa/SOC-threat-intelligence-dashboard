@@ -7,7 +7,9 @@ import pandas as pd
 # ==============================
 # MongoDB Connection
 # ==============================
-client = MongoClient("mongodb://localhost:27017/")
+import os
+
+client = MongoClient(os.getenv("MONGODB_URI"))
 db = client["soc_db"]
 
 wazuh_collection = db["wazuh_alerts"]
