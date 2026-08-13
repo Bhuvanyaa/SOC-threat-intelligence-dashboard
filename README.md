@@ -91,3 +91,20 @@ SOC-threat-intelligence-dashboard/
 ├── .env.example
 ├── .gitignore
 └── README.md
+
+## 📸 Project Screenshots
+
+### SOC Threat Intelligence Dashboard
+
+The dashboard provides a centralized view of security alerts, IOC information,
+threat severity, alert sources, and recent correlated security events.
+
+![SOC Threat Intelligence Dashboard](screenshots/dashboard.png)
+
+### Recent Security Alerts
+
+![Recent Security Alerts](screenshots/alerts.png)
+
+### Alert Ingestion and Testing
+
+![Alert Ingestion](screenshots/testing.png)
