@@ -21,7 +21,6 @@ The dashboard provides a centralized view of detected threats and their severity
 
 ## 🏗️ Architecture
 
-```text
                  ┌─────────────────┐
                  │      Wazuh      │
                  │ Security Alerts │
@@ -58,6 +57,7 @@ The dashboard provides a centralized view of detected threats and their severity
                             │  SOC Dashboard  │
                             │ Dash + Plotly   │
                             └─────────────────┘
+                            
 
 ## 🛠️ Technologies Used
 
