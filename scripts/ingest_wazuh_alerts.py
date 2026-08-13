@@ -1,10 +1,25 @@
+import os
 import json
 import time
+from dotenv import load_dotenv
 from pymongo import MongoClient
 
+load_dotenv()
+
+# ==============================
+# Wazuh Alert File
+# ==============================
 ALERT_FILE = "/var/ossec/logs/alerts/alerts.json"
 
-client = MongoClient("mongodb://localhost:27017/")
+# ==============================
+# MongoDB Connection
+# ==============================
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI not found in environment variables")
+
+client = MongoClient(MONGODB_URI)
 db = client["soc_db"]
 collection = db["wazuh_alerts"]
 
@@ -15,6 +30,7 @@ with open(ALERT_FILE, "r") as f:
 
     while True:
         line = f.readline()
+
         if not line:
             time.sleep(1)
             continue
