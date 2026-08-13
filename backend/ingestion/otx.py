@@ -16,8 +16,9 @@ headers = {
     "X-OTX-API-KEY": OTX_API_KEY
 }
 
-client = MongoClient("mongodb://localhost:27017/")
-db = client.soc_db
+import os
+
+client = MongoClient(os.getenv("MONGODB_URI"))
 iocs = db.iocs
 
 response = requests.get(OTX_URL, headers=headers, timeout=30)
