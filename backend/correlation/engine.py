@@ -3,7 +3,7 @@ from pymongo import MongoClient
 # ==============================
 # MongoDB Connection
 # ==============================
-client = MongoClient("mongodb://localhost:27017/")
+MONGODB_URI=your_mongodb_connection_string
 db = client["soc_db"]
 
 wazuh_collection = db["wazuh_alerts"]
