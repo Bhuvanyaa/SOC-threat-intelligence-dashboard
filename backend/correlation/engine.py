@@ -1,10 +1,23 @@
+import os
+from dotenv import load_dotenv
 from pymongo import MongoClient
+
+load_dotenv()
 
 # ==============================
 # MongoDB Connection
 # ==============================
-MONGODB_URI=your_mongodb_connection_string
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI not found in environment variables")
+
+client = MongoClient(MONGODB_URI)
 db = client["soc_db"]
+
+wazuh_collection = db["wazuh_alerts"]
+ioc_collection = db["iocs"]
+correlated_collection = db["correlated_alerts"]
 
 wazuh_collection = db["wazuh_alerts"]
 ioc_collection = db["iocs"]
