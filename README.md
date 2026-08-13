@@ -1,48 +1,67 @@
-# 🛡️ SOC Threat Intelligence & Log Correlation Dashboard
+# 🛡️ SOC Threat Intelligence Dashboard
 
-A Python-based Security Operations Center (SOC) dashboard that integrates threat intelligence, Wazuh security alerts, MongoDB, and automated alert correlation to identify and visualize potential security threats.
+A Security Operations Center (SOC) dashboard that integrates threat intelligence, Wazuh security alerts, IOC correlation, and MongoDB to support security event monitoring and threat analysis.
 
 ## 🎯 Project Overview
 
-This project demonstrates a SOC monitoring workflow that collects security alerts from Wazuh, ingests Indicators of Compromise (IOCs) from AlienVault OTX, stores security data in MongoDB, and correlates security events with known threat indicators.
+This project collects security alerts from Wazuh, ingests Indicators of Compromise (IOCs) from AlienVault OTX, stores security data in MongoDB, and correlates alerts with known malicious indicators.
 
-The system assigns severity levels to correlated alerts and presents the results through an interactive Plotly Dash dashboard.
+The dashboard provides a centralized view of detected threats and their severity.
 
-## ✨ Key Features
+## ✨ Features
 
-- 🔍 Wazuh security alert ingestion
-- 🌐 AlienVault OTX threat intelligence ingestion
-- 🧩 IOC-based alert correlation
-- 🚨 Automated severity classification
-- 🗄️ MongoDB-based security data storage
+- 📡 Wazuh security alert ingestion
+- 🌐 AlienVault OTX threat intelligence integration
+- 🔎 IOC-based threat correlation
+- 🚨 Threat severity classification
 - 📊 Interactive SOC dashboard
+- 🗄️ MongoDB-based security data storage
 - 🔄 Automatic dashboard refresh
-- 🧠 MITRE ATT&CK-based detection rules
-- 🔐 Environment-based API key and database configuration
+- 🛡️ Environment-variable based secret management
 
 ## 🏗️ Architecture
 
+Wazuh Alerts
+      ↓
+Alert Ingestion
+      ↓
+MongoDB
+      ↓
+IOC Correlation ← AlienVault OTX
+      ↓
+Correlated Threats
+      ↓
+SOC Dashboard
+
+## 🛠️ Technologies Used
+
+- Python
+- Wazuh
+- AlienVault OTX
+- MongoDB
+- Dash
+- Plotly
+- Pandas
+- Requests
+- PyMongo
+
+## 📂 Project Structure
+
 ```text
-             ┌─────────────────────┐
-             │   AlienVault OTX    │
-             │  Threat Intelligence│
-             └──────────┬──────────┘
-                        │
-                        ▼
-                 ┌─────────────┐
-                 │   MongoDB   │
-                 │     IOCs    │
-                 └──────┬──────┘
-                        │
-                        │
-┌──────────────┐        ▼
-│    Wazuh     │──► Correlation Engine
-│ Security     │        │
-│   Alerts     │        ▼
-└──────────────┘  Correlated Alerts
-                        │
-                        ▼
-              ┌──────────────────┐
-              │   SOC Dashboard  │
-              │   Plotly Dash    │
-              └──────────────────┘
+SOC-threat-intelligence-dashboard/
+│
+├── backend/
+│   ├── correlation/
+│   └── ingestion/
+│
+├── config/
+│
+├── frontend/
+│
+├── scripts/
+│
+├── ingest_wazuh_alerts.py
+├── requirements.txt
+├── .env.example
+├── .gitignore
+└── README.md
