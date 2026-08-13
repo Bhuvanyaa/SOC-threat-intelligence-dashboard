@@ -21,17 +21,43 @@ The dashboard provides a centralized view of detected threats and their severity
 
 ## 🏗️ Architecture
 
-Wazuh Alerts
-      ↓
-Alert Ingestion
-      ↓
-MongoDB
-      ↓
-IOC Correlation ← AlienVault OTX
-      ↓
-Correlated Threats
-      ↓
-SOC Dashboard
+```text
+                 ┌─────────────────┐
+                 │      Wazuh      │
+                 │ Security Alerts │
+                 └────────┬────────┘
+                          │
+                          ▼
+                ┌───────────────────┐
+                │  Alert Ingestion  │
+                │      Python       │
+                └─────────┬─────────┘
+                          │
+                          ▼
+                  ┌───────────────┐
+                  │    MongoDB    │
+                  │   soc_db      │
+                  └───────┬───────┘
+                          │
+             ┌────────────┴────────────┐
+             │                         │
+             ▼                         ▼
+     ┌───────────────┐       ┌────────────────┐
+     │ AlienVault OTX│       │ Correlation    │
+     │ Threat Intel  │──────▶│ Engine         │
+     └───────────────┘       └───────┬────────┘
+                                     │
+                                     ▼
+                            ┌─────────────────┐
+                            │ Correlated      │
+                            │ Threats         │
+                            └────────┬────────┘
+                                     │
+                                     ▼
+                            ┌─────────────────┐
+                            │  SOC Dashboard  │
+                            │ Dash + Plotly   │
+                            └─────────────────┘
 
 ## 🛠️ Technologies Used
 
