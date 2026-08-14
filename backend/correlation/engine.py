@@ -1,41 +1,45 @@
 import os
-from dotenv import load_dotenv
 from pymongo import MongoClient
+from dotenv import load_dotenv
 
+# ==============================
+# Load Environment Variables
+# ==============================
 load_dotenv()
+
+MONGODB_URI = os.getenv("MONGODB_URI")
+
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI is not configured.")
 
 # ==============================
 # MongoDB Connection
 # ==============================
-MONGODB_URI = os.getenv("MONGODB_URI")
-
-if not MONGODB_URI:
-    raise ValueError("MONGODB_URI not found in environment variables")
-
 client = MongoClient(MONGODB_URI)
+
 db = client["soc_db"]
 
 wazuh_collection = db["wazuh_alerts"]
 ioc_collection = db["iocs"]
 correlated_collection = db["correlated_alerts"]
 
-wazuh_collection = db["wazuh_alerts"]
-ioc_collection = db["iocs"]
-correlated_collection = db["correlated_alerts"]
 
 # ==============================
 # Severity Logic
 # ==============================
 def calculate_severity(alert):
-    description = alert.get("description", "").lower()
+
+    description = str(
+        alert.get("description", "")
+    ).lower()
 
     high_patterns = [
-        "attempt to login using a non-existent user",
-        "invalid user",
-        "authentication failure",
         "brute force",
         "password guessing",
-        "pam 2 more authentication failures"
+        "authentication failure",
+        "invalid user",
+        "non-existent user",
+        "authentication attempts"
     ]
 
     for pattern in high_patterns:
@@ -47,46 +51,79 @@ def calculate_severity(alert):
 
     return "LOW"
 
+
 # ==============================
 # Start Correlation
 # ==============================
-print("🔗 Starting correlation engine...")
+print("🔗 Starting SOC correlation engine...")
 
-# Load IOC IPs
-ioc_ips = list(ioc_collection.find({"type": "IPv4"}))
-ioc_set = {ioc["indicator"]: ioc for ioc in ioc_ips}
+# Load IOC IP addresses
+ioc_documents = list(
+    ioc_collection.find(
+        {"type": "IPv4"}
+    )
+)
+
+ioc_set = {
+    ioc.get("indicator"): ioc
+    for ioc in ioc_documents
+    if ioc.get("indicator")
+}
 
 print(f"📌 Loaded {len(ioc_set)} IOC IPs")
 
-# Fetch Wazuh alerts
+
+# ==============================
+# Process Wazuh Alerts
+# ==============================
 wazuh_alerts = wazuh_collection.find()
 
 threat_count = 0
 
 for alert in wazuh_alerts:
+
     src_ip = alert.get("src_ip")
 
     if not src_ip:
         continue
 
-    if src_ip in ioc_set:
-        ioc = ioc_set[src_ip]
+    # Check whether source IP exists in IOC database
+    if src_ip not in ioc_set:
+        continue
 
-        severity = calculate_severity(alert)
+    ioc = ioc_set[src_ip]
 
-        correlated_alert = {
-            "src_ip": src_ip,
-            "description": alert.get("description"),
-            "severity": severity,
-            "timestamp": alert.get("timestamp"),
-            "rule_id": alert.get("rule_id"),
-            "mitre": alert.get("mitre", []),
-            "ioc_source": ioc.get("source", "UNKNOWN")
-        }
+    severity = calculate_severity(alert)
 
-        correlated_collection.insert_one(correlated_alert)
-        threat_count += 1
+    correlated_alert = {
+        "src_ip": src_ip,
+        "description": alert.get(
+            "description",
+            "Unknown activity"
+        ),
+        "severity": severity,
+        "timestamp": alert.get("timestamp"),
+        "rule_id": alert.get("rule_id"),
+        "mitre": alert.get("mitre", []),
+        "ioc_source": ioc.get(
+            "source",
+            "AlienVault OTX"
+        )
+    }
 
-        print(f"🚨 {severity} threat detected from {src_ip}")
+    correlated_collection.insert_one(
+        correlated_alert
+    )
 
-print(f"✅ Correlation complete — {threat_count} threats detected")
+    threat_count += 1
+
+    print(
+        f"🚨 {severity} threat detected "
+        f"from {src_ip}"
+    )
+
+
+print(
+    f"✅ Correlation complete — "
+    f"{threat_count} threats detected"
+)
